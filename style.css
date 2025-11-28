@@ -1,7 +1,13 @@
-body {
-  background: #e8f7e8;
-  color: #1d6e36;
-  text-align: center;
-  margin-top: 100px;
-  font-family: Arial, sans-serif;
-}
+:root{--bg:#f6fbf8;--card:#ffffff;--accent:#0b6b3a;--muted:#556}
+*{box-sizing:border-box}
+body{font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);margin:0;color:#183}
+.topbar{background:var(--card);padding:18px 20px;border-bottom:1px solid #e8efe9}
+.topbar h1{margin:0;color:var(--accent);font-size:20px}
+.disclaimer{margin:6px 0 0;font-size:13px;color:#666}
+.container{max-width:900px;margin:28px auto;padding:0 16px}
+.card{background:var(--card);padding:18px;margin-bottom:18px;border-radius:8px;box-shadow:0 2px 4px rgba(20,20,20,0.03)}
+label{display:block;margin-top:8px;font-weight:600;color:#2a4}
+input[type="text"],input[type="email"],textarea{width:100%;padding:10px;border:1px solid #dfe8e2;border-radius:6px;margin-top:6px}
+button{margin-top:12px;background:var(--accent);color:#fff;padding:10px 14px;border-radius:6px;border:none;cursor:pointer}
+.result{margin-top:12px;color:#333}
+.footer{text-align:center;padding:20px 10px;color:#5a6;font-size:13px}
