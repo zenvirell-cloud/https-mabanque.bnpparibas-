@@ -1,12 +1,78 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Mon Premier Site</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Démo bancaire — site factice</title>
+  <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
-  <h1>Bienvenue !</h1>
-  <p>Ceci est mon tout premier site sur GitHub et Vercel.</p>
+  <header class="topbar">
+    <h1>Démo bancaire — site factice</h1>
+    <p class="disclaimer">Site factice à but éducatif — aucune donnée réelle n'est traitée.</p>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Envoyer un e‑mail de test</h2>
+      <form id="mailForm">
+        <label>Destinataire (to)</label>
+        <input name="to" type="email" placeholder="exemple@mail.com" required />
+        <label>Sujet</label>
+        <input name="subject" type="text" placeholder="Test SendGrid" required />
+        <label>Message</label>
+        <textarea name="text" placeholder="Bonjour — ceci est un test."></textarea>
+        <label>Reply‑To (optionnel)</label>
+        <input name="replyTo" type="email" placeholder="replyto@mail.com" />
+        <button type="submit">Envoyer</button>
+      </form>
+      <div id="mailResult" class="result" aria-live="polite"></div>
+    </section>
+
+    <section class="card">
+      <h2>Simuler un paiement (webhook)</h2>
+      <p>Ce formulaire envoie un webhook de simulation vers /api/payment-webhook.</p>
+      <button id="simulatePayment">Simuler paiement réussi</button>
+      <div id="webhookResult" class="result" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Demo éducative — ne saisissez pas de données réelles.</p>
+  </footer>
+
+<script>
+document.getElementById('mailForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const form = e.target;
+  const data = {
+    to: form.to.value,
+    subject: form.subject.value,
+    text: form.text.value,
+    replyTo: form.replyTo.value || undefined
+  };
+  const res = await fetch('/api/send', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(data)
+  });
+  const json = await res.json();
+  document.getElementById('mailResult').textContent = json.ok ? 'E-mail envoyé' : 'Erreur: ' + (json.error || JSON.stringify(json));
+});
+
+document.getElementById('simulatePayment').addEventListener('click', async () => {
+  const payload = {
+    type: 'payment.succeeded',
+    data: { object: { customer_email: 'client@example.com', amount: 1000 } }
+  };
+  const res = await fetch('/api/payment-webhook', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(payload)
+  });
+  const json = await res.json();
+  document.getElementById('webhookResult').textContent = json.ok ? 'Webhook simulé envoyé' : 'Erreur webhook: ' + (json.error || JSON.stringify(json));
+});
+</script>
 </body>
 </html>
